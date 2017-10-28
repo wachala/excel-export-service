@@ -1,0 +1,3 @@
+server:
+  context-path: /excel-export-service/api
+  port: 4444
