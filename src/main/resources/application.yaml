@@ -1,3 +1,16 @@
 server:
-  context-path: /excel-export-service/api
+  context-path: /excel-export-service
   port: 4444
+spring:
+  application:
+    name: excel-export-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: ${server.context-path}/health
+    status-page-url-path: ${server.context-path}/info
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2

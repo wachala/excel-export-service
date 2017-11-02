@@ -9,7 +9,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Slf4j
 @RestController
-@RequestMapping("/parking-lot")
+@RequestMapping("/api/parking-lot")
 public class ExportToExcelFileController {
 
     @RequestMapping(value = "/{id}", method = GET)
