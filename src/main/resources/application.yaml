@@ -14,3 +14,13 @@ eureka:
     status-page-url-path: ${server.context-path}/info
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
+
+ribbon:
+  eureka:
+    enabled: true
+    ReadTimeout: 20000
+    connectTimeout: 20000
+
+feign:
+  hystrix:
+    enabled: true
