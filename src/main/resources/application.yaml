@@ -7,7 +7,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${systemEnvironment['EUREKA_CLIENT_SERVICEURL_DEFAULTZONE']:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
     health-check-url-path: ${server.context-path}/health
