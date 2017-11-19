@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: excel-export-service
+  cloud:
+    config:
+      uri: ${systemEnvironment['CONFIGURATION_SERVICE_URL']:http://localhost:7777}
