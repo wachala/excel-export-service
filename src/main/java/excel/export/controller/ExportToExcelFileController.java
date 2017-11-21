@@ -12,7 +12,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/parking-lot")
+@RequestMapping("excel-export-service/api/parking-lot")
 public class ExportToExcelFileController {
 
     ExportToExcelFileService excelFileService;
