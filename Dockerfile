@@ -1,3 +1,3 @@
-FROM java:openjdk-8-jre
-CMD java -jar excel-export-service-1.0-SNAPSHOT.jar
-ADD target/excel-export-service-1.0-SNAPSHOT.jar .
+FROM maven:3-jdk-8-slim
+CMD java -jar /webapp/excel-export-service/target/excel-export-service-1.0-SNAPSHOT.jar
+COPY ./ /webapp/excel-export-service
