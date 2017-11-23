@@ -1,0 +1,4 @@
+FROM maven:3-jdk-8-slim
+COPY "target/excel-export-service-1.0-SNAPSHOT.jar" "/webapp/"
+EXPOSE 8761
+CMD java -jar /webapp/excel-export-service-1.0-SNAPSHOT.jar
