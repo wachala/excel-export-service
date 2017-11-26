@@ -29,7 +29,7 @@ script:
   - docker ps | grep -q dist
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "travis" ]; then
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker tag dist_image patrykks/iosr-excel-export-service;
     docker push patrykks/iosr-excel-export-service;
