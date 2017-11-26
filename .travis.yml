@@ -1,5 +1,10 @@
 sudo: required
 
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
 services:
   - docker
 
@@ -14,12 +19,12 @@ notifications:
 
 before_install:
   - docker build -t builder_image -f docker/Dockerfile.buidler .
-  - docker run -it --rm -v $(pwd):/microservice builder_image
+  - docker run -it --rm -v $(pwd):/microservice -v $HOME/.m2:/root/.m2 builder_image
   - docker build -t dist_image -f docker/Dockerfile.dist .
   - docker build -t test_image -f docker/Dockerfile.test .
 
 script:
-  - docker run -it --name test test_image
+  - docker run -it -v $HOME/.m2:/root/.m2 --name test test_image
   - docker run -d --name dist dist_image
   - docker ps | grep -q dist
 
