@@ -10,7 +10,7 @@ services:
 
 branches:
   only:
-    - travis
+    - master
 
 notifications:
   email: false
