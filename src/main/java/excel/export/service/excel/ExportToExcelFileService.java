@@ -27,7 +27,6 @@ public class ExportToExcelFileService {
 
     public HSSFWorkbook getExcelFile() {
         List<ParkingLot> allParkingLots = parkingLotService.getAllParkingLots();
-
         List<Object[]> excelRows = allParkingLots.stream()
                 .map(parkingLot -> parkingLotTransformer.transform(parkingLot))
                 .collect(toList());
@@ -38,10 +37,11 @@ public class ExportToExcelFileService {
                                 new XlsSheetBuilder()
                                         .withName("Parking lots overview")
                                         .withTable(
-                                                Collections.singletonList(new XlsTableBuilder()
-                                                        .withTitle("Parking Lots overview")
-                                                        .withHeaders(HeaderFactory.getParkingLotHeader())
-                                                        .withRows(excelRows)
+                                                Collections.singletonList(
+                                                        new XlsTableBuilder()
+                                                                .withTitle("Parking Lots overview")
+                                                                .withHeaders(HeaderFactory.getParkingLotHeader())
+                                                                .withRows(excelRows)
                                                 )
                                         )
                         )
@@ -49,12 +49,27 @@ public class ExportToExcelFileService {
     }
 
     public HSSFWorkbook getExcelFileForParkingLot(Long id) {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        workbook.createSheet("Sheet1");
-
         ParkingLot parkingLot = parkingLotService.getParkingLotById(id);
+        Object[] excelRows = parkingLotTransformer.transform(parkingLot);
 
-        return workbook;
+        return new XlsBuilder()
+                .withSheet(
+                        Collections.singletonList(
+                                new XlsSheetBuilder()
+                                        .withName("Details of parking lot: " + id)
+                                        .withTable(
+                                                Collections.singletonList(
+                                                        new XlsTableBuilder()
+                                                                .withTitle("Parking Lots overview")
+                                                                .withHeaders(HeaderFactory.getParkingLotHeader())
+                                                                .withRows(Collections.singletonList(
+                                                                        excelRows
+                                                                ))
+                                                )
+                                        )
+                        )
+                )
+                .build();
     }
 
 }
