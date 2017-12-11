@@ -1,5 +1,6 @@
 package excel.export.controller;
 
+import excel.export.controller.enricher.ResponseHeaderEnricher;
 import excel.export.service.excel.ExportToExcelFileService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +20,24 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("excel-export-service/api/parking-lot")
 public class ExportToExcelFileController {
 
-    ExportToExcelFileService excelFileService;
+    private final ExportToExcelFileService excelFileService;
+    private final ResponseHeaderEnricher headerEnricher;
 
     @Autowired
-    public ExportToExcelFileController(ExportToExcelFileService excelFileService) {
+    public ExportToExcelFileController(ExportToExcelFileService excelFileService, ResponseHeaderEnricher headerEnricher) {
         this.excelFileService = excelFileService;
+        this.headerEnricher = headerEnricher;
     }
 
     @ApiOperation(value = "Returns excel file with detailed data of parking lot with given id.")
     @RequestMapping(value = "/{id}", method = GET)
     public void exportToExcelByParkingLotId(@PathVariable(name = "id") Long id, HttpServletResponse response) throws IOException {
         log.info("Exporting to excel file for parking lot with id {}", id);
-
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Pragma", "public");
-        response.setHeader("Cache-Control", "max-age=0");
-        response.setHeader("Content-Disposition", "attachment; filename=filename.xls");
+        headerEnricher.enrich(response);
 
         HSSFWorkbook workbook = excelFileService.getExcelFileForParkingLot(id);
 
-        workbook.write(response.getOutputStream()); // Write workbook to response.
+        workbook.write(response.getOutputStream());
         workbook.close();
     }
 
@@ -46,15 +45,11 @@ public class ExportToExcelFileController {
     @RequestMapping(method = GET)
     public void exportToExcelForAllParkingLots(HttpServletResponse response) throws IOException {
         log.info("Exporting to excel file for all parking lots");
-
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Pragma", "public");
-        response.setHeader("Cache-Control", "max-age=0");
-        response.setHeader("Content-Disposition", "attachment; filename=filename.xls");
+        headerEnricher.enrich(response);
 
         HSSFWorkbook workbook = excelFileService.getExcelFile();
 
-        workbook.write(response.getOutputStream()); // Write workbook to response.
+        workbook.write(response.getOutputStream());
         workbook.close();
     }
 

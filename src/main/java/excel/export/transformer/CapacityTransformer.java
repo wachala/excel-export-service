@@ -15,8 +15,9 @@ public class CapacityTransformer implements Transformer<Map<ParkingLotType, Inte
 
         for (ParkingLotType parkingLotType : ParkingLotType.values()) {
             Integer result = source.get(parkingLotType);
+            String parkingLot = parkingLotType.toString().toLowerCase().replace("for_", "");
 
-            builder.append(nonNull(result) ? parkingLotType + ": " + result : parkingLotType + ": -");
+            builder.append(nonNull(result) ? parkingLot + ": " + result + "\n" : parkingLot + ": -\n");
         }
 
         return builder.toString();

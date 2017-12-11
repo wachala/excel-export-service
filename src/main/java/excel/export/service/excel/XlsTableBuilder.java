@@ -1,8 +1,8 @@
 package excel.export.service.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
@@ -33,11 +33,10 @@ public class XlsTableBuilder {
         //TITLE
         Row titleRow = sheet.createRow(0);
         Cell titleCell = titleRow.createCell(0);
-        // TODO prepare style for headers
-        // titleCell.setCellStyle(styles.get("title"));
-
+        CellStyle titleStyle = getTitleStyle(sheet.getWorkbook());
+        titleCell.setCellStyle(titleStyle);
         titleCell.setCellValue(title);
-        sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$L$1"));
+        sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$I$1"));
 
         //HEADER ROW
         Row headerRow = sheet.createRow(1);
@@ -45,23 +44,29 @@ public class XlsTableBuilder {
         Cell headerCell;
 
         maxColumn = headers.length;
+        CellStyle columnHeaderStyle = getHeaderStyle(sheet.getWorkbook());
+
         for (int i = 0; i < headers.length; i++) {
             headerCell = headerRow.createCell(i);
+            headerCell.setCellStyle(columnHeaderStyle);
             headerCell.setCellValue((String) headers[i]);
-            // TODO add some styles
-            // headerCell.setCellStyle(styles.get("header"));
+            headerCell.setCellStyle(columnHeaderStyle);
         }
 
+        //ACTUAL DATA
         int currentRow = 2;
+        CellStyle cellStyle = getCellStyle(sheet.getWorkbook());
         for (Object rowData[] : rows) {
             Row row = sheet.createRow(currentRow);
-            //TODO add styling
 
             for (int i = 0; i < rowData.length; i++) {
                 Cell cell = row.createCell(i);
+                cell.setCellStyle(cellStyle);
 
-                //TODO add support for numeric values
-                cell.setCellValue((String) rowData[i]);
+                if (rowData[i] instanceof String)
+                    cell.setCellValue((String) rowData[i]);
+                else
+                    cell.setCellValue((Long) rowData[i]);
 
                 if (i > maxColumn)
                     maxColumn = i;
@@ -72,6 +77,55 @@ public class XlsTableBuilder {
 
         for (int i = 0; i <= maxColumn; i++)
             sheet.autoSizeColumn(i);
+    }
+
+    private CellStyle getTitleStyle(HSSFWorkbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 16);
+        font.setBold(true);
+
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+
+        return style;
+    }
+
+    private CellStyle getHeaderStyle(HSSFWorkbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 14);
+        font.setColor(IndexedColors.WHITE.getIndex());
+
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+
+        return style;
+    }
+
+    private CellStyle getCellStyle(HSSFWorkbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setColor(IndexedColors.GREY_80_PERCENT.getIndex());
+        font.setFontHeightInPoints((short) 14);
+
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        style.setWrapText(true);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+
+        return style;
     }
 
 }

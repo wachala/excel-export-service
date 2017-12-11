@@ -18,14 +18,14 @@ public class ParkingLotToXlsRowTransformer implements Transformer<ParkingLot, Ob
     public Object[] transform(ParkingLot source) {
         return new Object[]{
                 source.getId(),
-                source.getLocation(),
+                source.getLocation().toString(),
                 source.getAddress(),
                 source.getPricing(),
                 source.getSecurity(),
                 source.getRestrictions(),
                 source.getAdditionalInformation(),
                 source.getGoogleStreetViewLink(),
-                capacityTransformer.transform(source.getParkingCapacity()),
+                capacityTransformer.transform(source.getParkingCapacity())
         };
     }
 }
