@@ -31,40 +31,30 @@ public class ExportToExcelFileService {
                 .map(parkingLot -> parkingLotTransformer.transform(parkingLot))
                 .collect(toList());
 
-        return new XlsBuilder()
-                .withSheet(
-                        Collections.singletonList(
-                                new XlsSheetBuilder()
-                                        .withName("Parking lots overview")
-                                        .withTable(
-                                                Collections.singletonList(
-                                                        new XlsTableBuilder()
-                                                                .withTitle("Parking Lots overview")
-                                                                .withHeaders(HeaderFactory.getParkingLotHeader())
-                                                                .withRows(excelRows)
-                                                )
-                                        )
-                        )
-                ).build();
+        return prepareWorkbook("Parking lots overview", excelRows);
     }
 
     public HSSFWorkbook getExcelFileForParkingLot(Long id) {
         ParkingLot parkingLot = parkingLotService.getParkingLotById(id);
         Object[] excelRows = parkingLotTransformer.transform(parkingLot);
 
+        return prepareWorkbook("Details of parking lot: " + id, Collections.singletonList(excelRows));
+    }
+
+    private HSSFWorkbook prepareWorkbook(String title, List<Object[]> rows) {
         return new XlsBuilder()
                 .withSheet(
                         Collections.singletonList(
                                 new XlsSheetBuilder()
-                                        .withName("Details of parking lot: " + id)
+                                        .withName(title)
                                         .withTable(
                                                 Collections.singletonList(
                                                         new XlsTableBuilder()
-                                                                .withTitle("Parking Lots overview")
+                                                                .withTitle(title)
                                                                 .withHeaders(HeaderFactory.getParkingLotHeader())
-                                                                .withRows(Collections.singletonList(
-                                                                        excelRows
-                                                                ))
+                                                                .withRows(
+                                                                        rows
+                                                                )
                                                 )
                                         )
                         )
