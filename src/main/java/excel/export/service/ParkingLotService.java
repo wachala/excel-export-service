@@ -4,6 +4,7 @@ import excel.export.model.ParkingLot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @FeignClient(name = "parking-lot-service", fallback = ParkingLotService.ParkingLotServiceFallback.class)
+@Service
 public interface ParkingLotService {
 
     @RequestMapping(method = GET, value = "/parking-lot-service/api/parking-lot")
