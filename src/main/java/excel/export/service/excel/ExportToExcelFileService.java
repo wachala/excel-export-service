@@ -38,7 +38,7 @@ public class ExportToExcelFileService {
         ParkingLot parkingLot = parkingLotService.getParkingLotById(id);
         Object[] excelRows = parkingLotTransformer.transform(parkingLot);
 
-        return prepareWorkbook("Details of parking lot: " + id, Collections.singletonList(excelRows));
+        return prepareWorkbook("Details of parking lot " + id, Collections.singletonList(excelRows));
     }
 
     private HSSFWorkbook prepareWorkbook(String title, List<Object[]> rows) {

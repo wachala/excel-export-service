@@ -17,4 +17,5 @@ public class ParkingLot {
     private String additionalInformation;
     private String googleStreetViewLink;
     private Map<ParkingLotType, Integer> parkingCapacity;
+    //TODO amend to changes in parking-lot-service
 }
