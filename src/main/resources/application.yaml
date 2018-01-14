@@ -1,0 +1,23 @@
+server:
+  port: 4444
+name: excel-export-service
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        input: profiles
+
+ribbon:
+  eureka:
+    enabled: false
+
+parking-lot-service:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: iosr-parking-lot-service:5555
+
+feign:
+  hystrix:
+    enabled: true

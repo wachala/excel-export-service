@@ -13,7 +13,10 @@ import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@FeignClient(name = "parking-lot-service", fallback = ParkingLotService.ParkingLotServiceFallback.class)
+@FeignClient(name = "parking-lot-service",
+        fallback = ParkingLotService.ParkingLotServiceFallback.class,
+        url = "${parking-lot-service.ribbon.listOfServers}"
+)
 @Service
 public interface ParkingLotService {
 
